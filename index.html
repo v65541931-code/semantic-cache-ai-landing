@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Semantic Cache AI - Instantly Recall Past AI Answers</title>
+  <meta name="description" content="A zero-cloud browser extension that semantically caches your AI conversations. Works on ChatGPT, Gemini & Claude. Save time, tokens, and money.">
+  <style>
+    :root {
+      --bg: #030712;
+      --surface: #111827;
+      --border: #1f2937;
+      --primary: #a78bfa;
+      --primary-hover: #8b5cf6;
+      --text: #f9fafb;
+      --text-muted: #9ca3af;
+      --accent: #10b981;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    header {
+      padding: 24px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 20px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .hero {
+      padding: 80px 0;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 48px;
+      line-height: 1.1;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, #f9fafb, #9ca3af);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .subtitle {
+      font-size: 20px;
+      color: var(--text-muted);
+      max-width: 700px;
+      margin: 0 auto 40px;
+    }
+
+    .cta-group {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 16px;
+      text-decoration: none;
+      transition: all 0.2s;
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #111827;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-hover);
+      transform: translateY(-2px);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+
+    .btn-outline:hover {
+      background: var(--surface);
+    }
+
+    .features {
+      padding: 80px 0;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .feature-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+    }
+
+    .feature-icon {
+      font-size: 24px;
+      margin-bottom: 16px;
+      display: inline-block;
+      padding: 12px;
+      background: rgba(167, 139, 250, 0.1);
+      border-radius: 12px;
+      color: var(--primary);
+    }
+
+    .feature-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .feature-desc {
+      color: var(--text-muted);
+      font-size: 15px;
+    }
+
+    .pricing {
+      padding: 80px 0;
+      text-align: center;
+    }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+      max-width: 800px;
+      margin: 40px auto 0;
+      text-align: left;
+    }
+
+    .pricing-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .pricing-card.pro {
+      border-color: var(--primary);
+      box-shadow: 0 0 40px rgba(167, 139, 250, 0.1);
+      position: relative;
+    }
+
+    .pro-badge {
+      position: absolute;
+      top: -12px;
+      right: 24px;
+      background: var(--primary);
+      color: #111827;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .price {
+      font-size: 36px;
+      font-weight: 700;
+      margin: 16px 0 24px;
+    }
+
+    .price span {
+      font-size: 16px;
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+
+    .feature-list {
+      list-style: none;
+      margin-bottom: 32px;
+      flex-grow: 1;
+    }
+
+    .feature-list li {
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-muted);
+    }
+
+    .feature-list li.included {
+      color: var(--text);
+    }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 40px 0;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="logo">⚡ Semantic Cache AI</div>
+      <div>
+        <a href="#pricing" class="btn btn-outline" style="padding: 8px 16px; font-size: 14px;">Pricing</a>
+      </div>
+    </header>
+
+    <div class="hero">
+      <h1>Never wait for the same<br>AI answer twice.</h1>
+      <p class="subtitle">A zero-cloud browser extension that semantically caches your AI conversations. Works perfectly on ChatGPT, Gemini & Claude. Save time, save tokens, save money.</p>
+      
+      <div class="cta-group">
+        <a href="https://chrome.google.com/webstore" target="_blank" class="btn btn-outline">Add to Chrome (Free)</a>
+        <a href="#pricing" class="btn btn-primary">⭐ Upgrade to Pro</a>
+      </div>
+    </div>
+
+    <div class="features">
+      <div class="feature-card">
+        <div class="feature-icon">🧠</div>
+        <div class="feature-title">True Semantic Matching</div>
+        <div class="feature-desc">It doesn't just match exact words. It understands meaning. Ask "how to reverse a string" and it matches "reversing strings in Python".</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔒</div>
+        <div class="feature-title">Zero Cloud. 100% Local.</div>
+        <div class="feature-desc">Your prompts never leave your machine. Caching is powered by an in-browser SQLite database and AES-256 encrypted vaults.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">💰</div>
+        <div class="feature-title">Save API Tokens</div>
+        <div class="feature-desc">Stop burning API credits on duplicate questions. See exactly how much money and time you've saved in the extension dashboard.</div>
+      </div>
+    </div>
+
+    <div id="pricing" class="pricing">
+      <h2>Simple pricing. Huge savings.</h2>
+      <p class="subtitle" style="font-size: 16px; margin-bottom: 0;">Try it for free, upgrade when you need power.</p>
+
+      <div class="pricing-grid">
+        <div class="pricing-card">
+          <h3>Free</h3>
+          <div class="price">$0<span>/month</span></div>
+          <ul class="feature-list">
+            <li class="included">✅ Hash-based exact caching</li>
+            <li class="included">✅ Works on ChatGPT, Gemini & Claude</li>
+            <li class="included">✅ 50 max cache entries</li>
+            <li class="included">✅ Basic Money Saved dashboard</li>
+            <li>❌ Smart Query Advisor</li>
+            <li>❌ Edit/Delete cache entries</li>
+          </ul>
+          <a href="#" class="btn btn-outline" style="width: 100%;">Install Free</a>
+        </div>
+
+        <div class="pricing-card pro">
+          <div class="pro-badge">RECOMMENDED</div>
+          <h3>Pro</h3>
+          <div class="price">$4.99<span>/month</span></div>
+          <ul class="feature-list">
+            <li class="included">⭐ <strong>Neural Semantic Caching</strong></li>
+            <li class="included">⭐ Bring your own API key (Gemini/OpenAI)</li>
+            <li class="included">⭐ Unlimited cache entries</li>
+            <li class="included">⭐ <strong>Smart Query Advisor</strong></li>
+            <li class="included">⭐ Cache Viewer with Edit/Delete</li>
+            <li class="included">⭐ Cross-LLM portability</li>
+          </ul>
+          <a href="https://buy.stripe.com/REPLACE_ME" class="btn btn-primary" style="width: 100%;">Get Pro License</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="container">
+      &copy; 2026 Semantic Cache AI. Built for power users.
+    </div>
+  </footer>
+</body>
+</html>
