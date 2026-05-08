@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Semantic Cache AI - Instantly Recall Past AI Answers</title>
   <meta name="description" content="A zero-cloud browser extension that semantically caches your AI conversations. Works on ChatGPT, Gemini & Claude. Save time, tokens, and money.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg: #030712;
@@ -20,7 +23,7 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
       background-color: var(--bg);
       color: var(--text);
       line-height: 1.6;
@@ -72,6 +75,7 @@
       display: flex;
       gap: 16px;
       justify-content: center;
+      flex-wrap: wrap;
     }
 
     .btn {
@@ -115,11 +119,24 @@
       gap: 24px;
     }
 
+    @media (max-width: 768px) {
+      .features { grid-template-columns: 1fr; }
+      .pricing-grid { grid-template-columns: 1fr !important; }
+      h1 { font-size: 32px; }
+      .subtitle { font-size: 16px; }
+    }
+
     .feature-card {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 12px;
       padding: 24px;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(167, 139, 250, 0.3);
     }
 
     .feature-icon {
@@ -164,6 +181,11 @@
       padding: 32px;
       display: flex;
       flex-direction: column;
+      transition: transform 0.2s;
+    }
+
+    .pricing-card:hover {
+      transform: translateY(-4px);
     }
 
     .pricing-card.pro {
@@ -187,13 +209,20 @@
     .price {
       font-size: 36px;
       font-weight: 700;
-      margin: 16px 0 24px;
+      margin: 16px 0 8px;
     }
 
     .price span {
       font-size: 16px;
       color: var(--text-muted);
       font-weight: 400;
+    }
+
+    .trial-note {
+      font-size: 13px;
+      color: var(--accent);
+      font-weight: 500;
+      margin-bottom: 20px;
     }
 
     .feature-list {
@@ -268,6 +297,7 @@
         <div class="pricing-card">
           <h3>Free</h3>
           <div class="price">$0<span>/month</span></div>
+          <div class="trial-note" style="color: var(--text-muted);">Free forever</div>
           <ul class="feature-list">
             <li class="included">✅ Hash-based exact caching</li>
             <li class="included">✅ Works on ChatGPT, Gemini & Claude</li>
@@ -282,7 +312,8 @@
         <div class="pricing-card pro">
           <div class="pro-badge">RECOMMENDED</div>
           <h3>Pro</h3>
-          <div class="price">$4.99<span>/month</span></div>
+          <div class="price" id="pro-price">$2.99<span>/month</span></div>
+          <div class="trial-note">🎁 Includes 10-day free trial</div>
           <ul class="feature-list">
             <li class="included">⭐ <strong>Neural Semantic Caching</strong></li>
             <li class="included">⭐ Bring your own API key (Gemini/OpenAI)</li>
@@ -291,7 +322,7 @@
             <li class="included">⭐ Cache Viewer with Edit/Delete</li>
             <li class="included">⭐ Cross-LLM portability</li>
           </ul>
-          <a href="https://buy.stripe.com/REPLACE_ME" class="btn btn-primary" style="width: 100%;">Get Pro License</a>
+          <a href="https://rzp.io/YOUR_PAYMENT_LINK" id="pro-cta" class="btn btn-primary" style="width: 100%;">Get Pro License</a>
         </div>
       </div>
     </div>
@@ -302,5 +333,19 @@
       &copy; 2026 Semantic Cache AI. Built for power users.
     </div>
   </footer>
+
+  <!-- Dynamic Pricing Script -->
+  <script>
+    (function() {
+      try {
+        var tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        var isIndia = (tz === 'Asia/Kolkata' || tz === 'Asia/Calcutta');
+        if (isIndia) {
+          var priceEl = document.getElementById('pro-price');
+          if (priceEl) priceEl.innerHTML = '₹299<span>/month</span>';
+        }
+      } catch(e) { /* fallback to default USD */ }
+    })();
+  </script>
 </body>
 </html>
